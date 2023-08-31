@@ -2,10 +2,12 @@ package com.example.firebasekotlin.Model
 
 class Post {
 
-    private var postid : String= ""
-    private var postimage : String= ""
-    private var publisher : String= ""
-    private var description : String= ""
+    private var postid: String = ""
+    private var postimage: String = ""
+    private var publisher: String = ""
+    private var description: String = ""
+    private var likes: Int = 0
+     var isLiked: Boolean = false
 
 
     constructor()
@@ -35,6 +37,12 @@ class Post {
         return description
     }
 
+    fun getLikes(): Int {
+        return likes
+    }
+
+
+
     ///Setter
 
     fun setpostid(postid: String)
@@ -54,4 +62,8 @@ class Post {
         this.description=description
     }
 
+    fun setLikes(likes: Int)
+    {
+        this.likes = likes
+    }
 }

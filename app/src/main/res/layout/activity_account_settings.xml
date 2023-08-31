@@ -65,7 +65,7 @@
         android:layout_marginTop="6dp"
         android:textStyle="bold"
         android:textSize="16dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/insta_color"
         />
     <EditText
         android:id="@+id/full_name_profile_frag"
@@ -101,33 +101,77 @@
         android:hint="Bio"
         />
 
-    <Button
+<!--    <Button-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_above="@id/delete_account_btn"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:layout_marginBottom="6dp"-->
+<!--        android:text="Logout"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="16dp"-->
+<!--        android:textAllCaps="false"-->
+<!--        />-->
+    <LinearLayout
         android:id="@+id/logout_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_above="@id/delete_account_btn"
+        android:background="@drawable/button_insta_bg"
+        android:textAllCaps="false"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="6dp"
-        android:background="@drawable/button_black_background"
+        >
+
+    <TextView
+        android:id="@+id/logout_btn_TV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:text="Logout"
         android:textColor="@color/white"
         android:textSize="16dp"
-        android:textAllCaps="false"
-        />
-    <Button
+        android:textStyle="bold" />
+    </LinearLayout>
+
+<!--    <Button-->
+<!--        android:id="@+id/delete_account_btn"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginRight="20dp"-->
+<!--        android:text="Delete Account"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginBottom="6dp"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="16dp"-->
+<!--        />-->
+    <LinearLayout
         android:id="@+id/delete_account_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Delete Account"
+        android:layout_height="50dp"
+        android:layout_above="@id/delete_account_btn"
+        android:background="@drawable/button_insta_bg"
         android:textAllCaps="false"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="6dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp"
+        >
+
+        <TextView
+            android:id="@+id/delete_account_btn_TV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Delete Account"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </RelativeLayout>

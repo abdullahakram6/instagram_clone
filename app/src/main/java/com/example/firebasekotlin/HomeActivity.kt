@@ -2,14 +2,13 @@ package com.example.firebasekotlin
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.firebasekotlin.Fragments.HomeFragment
-import com.example.firebasekotlin.Fragments.NotificationsFragment
-import com.example.firebasekotlin.Fragments.ProfileFragment
-import com.example.firebasekotlin.Fragments.SearchFragment
+import com.example.firebasekotlin.fragments.HomeFragment
+import com.example.firebasekotlin.fragments.NotificationsFragment
+import com.example.firebasekotlin.fragments.ProfileFragment
+import com.example.firebasekotlin.fragments.SearchFragment
 import com.example.firebasekotlin.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {

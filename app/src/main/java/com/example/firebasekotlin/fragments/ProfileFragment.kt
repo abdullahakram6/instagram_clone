@@ -1,4 +1,4 @@
-package com.example.firebasekotlin.Fragments
+package com.example.firebasekotlin.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -8,16 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.TextView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.firebasekotlin.AccountSettingsActivity
 import com.example.firebasekotlin.Model.User
 import com.example.firebasekotlin.R
 import com.example.firebasekotlin.databinding.FragmentProfileBinding
-import com.example.firebasekotlin.databinding.FragmentSearchBinding
 import com.google.android.material.appbar.AppBarLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -25,8 +22,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 
 
 class ProfileFragment : Fragment() {
@@ -38,10 +33,8 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseUser: FirebaseUser
 
 
-
-
-    lateinit var app_bar_layout_profile_frag : AppBarLayout
-    lateinit var scroll_view : ScrollView
+    lateinit var app_bar_layout_profile_frag: AppBarLayout
+    lateinit var scroll_view: ScrollView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,13 +47,10 @@ class ProfileFragment : Fragment() {
 
 
         app_bar_layout_profile_frag = view.findViewById(R.id.app_bar_layout_profile_frag)
-         scroll_view = view.findViewById(R.id.scroll_view)
+        scroll_view = view.findViewById(R.id.scroll_view)
 
-        app_bar_layout_profile_frag.visibility=View.GONE
-        scroll_view.visibility=View.GONE
-
-
-
+        app_bar_layout_profile_frag.visibility = View.GONE
+        scroll_view.visibility = View.GONE
 
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
@@ -76,9 +66,8 @@ class ProfileFragment : Fragment() {
             checkFollowAndFollowingButtonStatus()
         }
 
-
         binding.editAccountSettingsTV.setOnClickListener {
-            val getButtonText =  binding.editAccountSettingsTV.text.toString()
+            val getButtonText = binding.editAccountSettingsTV.text.toString()
 
             when {
                 getButtonText == "Edit Profile" -> startActivity(
@@ -104,7 +93,6 @@ class ProfileFragment : Fragment() {
 
                 }
 
-
                 getButtonText == "Following" -> {
 
                     firebaseUser.uid.let { it1 ->
@@ -122,7 +110,6 @@ class ProfileFragment : Fragment() {
 
                 }
             }
-
 
         }
 
@@ -215,7 +202,10 @@ class ProfileFragment : Fragment() {
 
                     Log.d("user image", user!!.getImage())
 
-                    Picasso.get().load(user.getImage()).placeholder(R.drawable.profile).into(binding.proImageProfileFrag)
+                    binding.proImageProfileFrag.load(user.getImage()) {
+                        placeholder(R.drawable.profile) // Optional: Placeholder image while loading
+                        transformations(CircleCropTransformation()) // Optional: Apply a circular transformation to the image
+                    }
 
 
 
@@ -224,8 +214,8 @@ class ProfileFragment : Fragment() {
                     binding.bioProfileFrag.text = user.getBio()
 
 
-                    app_bar_layout_profile_frag.visibility=View.VISIBLE
-                    scroll_view.visibility=View.VISIBLE
+                    app_bar_layout_profile_frag.visibility = View.VISIBLE
+                    scroll_view.visibility = View.VISIBLE
 
                 }
             }

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.firebasekotlin.Model.User
 import com.example.firebasekotlin.databinding.ActivityAccountSettingsBinding
 import com.google.android.gms.tasks.Continuation
@@ -23,7 +25,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
-import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 
 class AccountSettingsActivity : AppCompatActivity() {
@@ -138,11 +139,14 @@ class AccountSettingsActivity : AppCompatActivity() {
 
                     Log.d("user image", user!!.getImage())
 
-                    Picasso.get().load(user.getImage()).placeholder(R.drawable.profile).into(binding.profileImageView)
+                    binding.profileImageView.load(user.getImage()) {
+                        placeholder(R.drawable.profile) // Optional: Placeholder image while loading
+                        transformations(CircleCropTransformation()) // Optional: Apply a circular transformation to the image
+                    }
 
                     binding.usernameProfileFrag.setText(user.getUsername())
                     binding.fullNameProfileFrag.setText(user.getFullname())
-                    binding.bioProfileFrag.setText( user.getBio())
+                    binding.bioProfileFrag.setText(user.getBio())
 
                 }
             }
@@ -152,63 +156,88 @@ class AccountSettingsActivity : AppCompatActivity() {
             }
         })
     }
-    private fun uploadImageAndUpdateInfo()
-    {
+    private fun uploadImageAndUpdateInfo() {
 
 
-        when
-        {
-            binding.fullNameProfileFrag.text.toString() == "" -> Toast.makeText(this , "Please Enter FullName", Toast.LENGTH_LONG).show()
-            binding.usernameProfileFrag.text.toString() == "" -> Toast.makeText(this , "Please Enter userName", Toast.LENGTH_LONG).show()
-            binding.bioProfileFrag.text.toString() == "" -> Toast.makeText(this , "Please Enter bio", Toast.LENGTH_LONG).show()
-            imageUri == null -> Toast.makeText(this , "Please Set Profile Picture", Toast.LENGTH_LONG).show()
+        when {
+            binding.fullNameProfileFrag.text.toString() == "" -> Toast.makeText(
+                this,
+                "Please Enter FullName",
+                Toast.LENGTH_LONG
+            ).show()
 
-            else ->
-            {
+            binding.usernameProfileFrag.text.toString() == "" -> Toast.makeText(
+                this,
+                "Please Enter userName",
+                Toast.LENGTH_LONG
+            ).show()
 
+            binding.bioProfileFrag.text.toString() == "" -> Toast.makeText(
+                this,
+                "Please Enter bio",
+                Toast.LENGTH_LONG
+            ).show()
+
+            imageUri == null -> Toast.makeText(
+                this,
+                "Please Set Profile Picture",
+                Toast.LENGTH_LONG
+            ).show()
+
+            else -> {
                 val progressDialog = ProgressDialog(this)
                 progressDialog.setTitle("Account Settings")
                 progressDialog.setMessage("Please wait, we are updating your profile...")
                 progressDialog.show()
 
                 val fileref = storageProfilePicRef!!.child(firebaseUser!!.uid + "jpg")
-                var uploadTask : StorageTask<*>
-                uploadTask = fileref.putFile(imageUri!!)
-                uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                    if (!task.isSuccessful)
-                    {
-                        task.exception?.let {
-                            throw it
-                            progressDialog.dismiss()
-                        }
+
+                // Load the image using Coil
+                binding.profileImageView.load(imageUri) {
+                    listener { _, _ ->
+                        // When the image is successfully loaded, start the upload task
+                        val uploadTask: StorageTask<*>
+                        uploadTask = fileref.putFile(imageUri!!)
+                        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                            if (!task.isSuccessful) {
+                                task.exception?.let {
+                                    throw it
+                                    progressDialog.dismiss()
+                                }
+                            }
+                            return@Continuation fileref.downloadUrl
+                        }).addOnCompleteListener(OnCompleteListener<Uri> { task ->
+                            if (task.isSuccessful) {
+                                val downloadUrl = task.result
+                                myUrl = downloadUrl.toString()
+
+                                val ref = FirebaseDatabase.getInstance().reference.child("Users")
+
+                                val userMap = HashMap<String, Any>()
+                                userMap["fullName"] =
+                                    binding.fullNameProfileFrag.text.toString().lowercase()
+                                userMap["userName"] =
+                                    binding.usernameProfileFrag.text.toString().lowercase()
+                                userMap["bio"] = binding.bioProfileFrag.text.toString()
+                                userMap["image"] = myUrl
+
+                                ref.child(firebaseUser.uid).updateChildren(userMap)
+
+                                Toast.makeText(
+                                    this@AccountSettingsActivity,
+                                    "Profile Picture Set ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                finish()
+                                progressDialog.dismiss()
+                            } else {
+                                progressDialog.dismiss()
+                            }
+                        })
                     }
-                    return@Continuation fileref.downloadUrl
-                }).addOnCompleteListener ( OnCompleteListener<Uri>{task ->
-                    if (task.isSuccessful)
-                    {
-                        val downloadUrl = task.result
-                        myUrl = downloadUrl.toString()
-
-                        val ref = FirebaseDatabase.getInstance().reference.child("Users")
-
-                        val userMap = HashMap<String, Any >()
-                        userMap["fullName"]= binding.fullNameProfileFrag.text.toString().lowercase()
-                        userMap["userName"]= binding.usernameProfileFrag.text.toString().lowercase()
-                        userMap["bio"]= binding.bioProfileFrag.text.toString()
-                        userMap["image"]= myUrl
-
-                        ref.child(firebaseUser.uid).updateChildren(userMap)
-
-
-                        Toast.makeText(this , "Profile Picture Set ", Toast.LENGTH_LONG).show()
-                        finish()
-                        progressDialog.dismiss()
-                    }
-                    else{
-                        progressDialog.dismiss()
-                    }
-                } )
-
+                    // Optional: Placeholder image while loading
+                    placeholder(R.drawable.profile)
+                }
             }
         }
     }

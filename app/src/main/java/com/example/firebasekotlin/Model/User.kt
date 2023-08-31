@@ -2,12 +2,12 @@ package com.example.firebasekotlin.Model
 
 class User
 {
-    private var userName:String=""
-    private var fullName:String=""
-    private var bio:String=""
-    private var uid:String=""
-    private var image:String=""
-    private var description:String=""
+    private var userName: String = ""
+    private var fullName: String = ""
+    private var bio: String = ""
+    private var uid: String = ""
+    private var image: String = ""
+    private var description: String = ""
 
 
     constructor()
@@ -30,14 +30,7 @@ class User
     {
         this.userName=userName
     }
-    fun getdescription(): String
-    {
-        return description
-    }
-    fun setdescription(description: String)
-    {
-        this.description=description
-    }
+
     fun getFullname(): String
     {
         return fullName

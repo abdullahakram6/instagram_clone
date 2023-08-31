@@ -4,20 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.SearchFragment">
+    tools:context=".fragments.SearchFragment">
 
     <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/app_bar_layout_search"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
     android:background="@color/white">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/primary_bg_all"
         android:id="@+id/search_toolbar"
-        android:layout_marginTop="4dp"
         android:layout_marginHorizontal="6dp"
         >
         <RelativeLayout
@@ -25,8 +24,8 @@
             android:layout_height="wrap_content"
             >
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/search"
                 android:paddingTop="2dp"
                 android:id="@+id/search_fragment_icon"

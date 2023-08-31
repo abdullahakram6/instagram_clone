@@ -1,4 +1,4 @@
-package com.example.firebasekotlin.Fragments
+package com.example.firebasekotlin.fragments
 
 import android.os.Bundle
 import android.text.Editable
