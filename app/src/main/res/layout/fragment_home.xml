@@ -24,6 +24,7 @@
                 <ImageView
                     android:layout_width="123dp"
                     android:layout_height="20dp"
+                    android:layout_marginTop="4dp"
                     android:layout_alignParentLeft="true"
                     android:background="@drawable/meta_logo" />
 
