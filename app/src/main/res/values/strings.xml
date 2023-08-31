@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FirebaseKotlin</string>
+    <string name="app_name">Meta</string>
     <string name="don_t_have_account_signup">Don\'t have account?<font color='#0000CD'> Signup</font> </string>
     <string name="already_have_an_account_login">Already have an account? <font color='#0000CD'> login</font></string>
     <string name="title_activity_home">HomeActivity</string>
