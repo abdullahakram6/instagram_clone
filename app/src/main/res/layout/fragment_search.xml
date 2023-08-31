@@ -15,7 +15,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/button_black_background"
+        android:background="@drawable/primary_bg_all"
         android:id="@+id/search_toolbar"
         android:layout_marginTop="4dp"
         android:layout_marginHorizontal="6dp"
