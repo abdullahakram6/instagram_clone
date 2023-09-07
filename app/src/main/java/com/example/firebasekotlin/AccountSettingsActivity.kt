@@ -3,6 +3,8 @@ package com.example.firebasekotlin
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +28,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.theartofdev.edmodo.cropper.CropImage
+import java.io.ByteArrayOutputStream
 
 class AccountSettingsActivity : AppCompatActivity() {
 
@@ -33,8 +36,8 @@ class AccountSettingsActivity : AppCompatActivity() {
     private lateinit var firebaseUser: FirebaseUser
     private var checker = ""
     private var myUrl = ""
-    private var imageUri : Uri? = null
-    private var storageProfilePicRef: StorageReference?= null
+    private var imageUri: Uri? = null
+    private var storageProfilePicRef: StorageReference? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,25 +56,22 @@ class AccountSettingsActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
 
             val intent = Intent(this@AccountSettingsActivity, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or  Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
         }
 
         binding.changeImageTextBtn.setOnClickListener {
-            checker="clicked"
+            checker = "clicked"
             CropImage.activity()
-                .setAspectRatio(1,1)
+                .setAspectRatio(1, 1)
                 .start(this@AccountSettingsActivity)
         }
 
         binding.saveInfoProfileBtn.setOnClickListener {
-            if(checker == "clicked")
-            {
+            if (checker == "clicked") {
                 uploadImageAndUpdateInfo()
-            }
-            else
-            {
+            } else {
                 updateUserInfoOnly()
             }
         }
@@ -79,49 +79,48 @@ class AccountSettingsActivity : AppCompatActivity() {
     }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-    if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null)
-    {
-        val result = CropImage.getActivityResult(data)
-        imageUri = result.uri
-        binding.profileImageView.setImageURI(imageUri)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val result = CropImage.getActivityResult(data)
+            imageUri = result.uri
+            binding.profileImageView.setImageURI(imageUri)
 
-    }
+        }
     }
 
     private fun updateUserInfoOnly() {
 
-        if(binding.fullNameProfileFrag.text.toString() == "")
-        {
-            Toast.makeText(this , "Please Enter FullName", Toast.LENGTH_LONG).show()
-        }
-        else if(binding.usernameProfileFrag.text.toString() == "")
-        {
-            Toast.makeText(this , "Please Enter userName", Toast.LENGTH_LONG).show()
-        }
-        else if(binding.bioProfileFrag.text.toString() == "")
-        {
-            Toast.makeText(this , "Please Enter bio", Toast.LENGTH_LONG).show()
-        }
-        else
-        {
+        if (binding.fullNameProfileFrag.text.toString() == "") {
+            Toast.makeText(this, "Please Enter FullName", Toast.LENGTH_LONG).show()
+        } else if (binding.usernameProfileFrag.text.toString() == "") {
+            Toast.makeText(this, "Please Enter userName", Toast.LENGTH_LONG).show()
+        } else if (binding.bioProfileFrag.text.toString() == "") {
+            Toast.makeText(this, "Please Enter bio", Toast.LENGTH_LONG).show()
+        } else {
             val usersRef = FirebaseDatabase.getInstance().reference.child("Users")
 
-            val userMap = HashMap<String, Any >()
-            userMap["fullName"]= binding.fullNameProfileFrag.text.toString().lowercase()
-            userMap["userName"]= binding.usernameProfileFrag.text.toString().lowercase()
-            userMap["bio"]= binding.bioProfileFrag.text.toString()
+            val userMap = HashMap<String, Any>()
+            userMap["fullName"] = binding.fullNameProfileFrag.text.toString().lowercase()
+            userMap["userName"] = binding.usernameProfileFrag.text.toString().lowercase()
+            userMap["bio"] = binding.bioProfileFrag.text.toString()
 
             usersRef.child(firebaseUser.uid).updateChildren(userMap)
                 .addOnSuccessListener {
 
-                    Toast.makeText(this , "Account information has been updated successfully", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Account information has been updated successfully",
+                        Toast.LENGTH_LONG
+                    ).show()
                     finish()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this , "Failed to update account information: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Failed to update account information: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
         }
 
@@ -129,7 +128,8 @@ class AccountSettingsActivity : AppCompatActivity() {
     }
 
     private fun userInfo() {
-        val usersRef = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser.uid)
+        val usersRef =
+            FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser.uid)
 
         usersRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -156,6 +156,7 @@ class AccountSettingsActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun uploadImageAndUpdateInfo() {
 
 
@@ -190,10 +191,11 @@ class AccountSettingsActivity : AppCompatActivity() {
                 progressDialog.setMessage("Please wait, we are updating your profile...")
                 progressDialog.show()
 
-                val fileref = storageProfilePicRef!!.child(firebaseUser!!.uid + "jpg")
+                val fileref = storageProfilePicRef!!.child(firebaseUser.uid + "jpg")
 
                 // Load the image using Coil
                 binding.profileImageView.load(imageUri) {
+                    size(800, 800) // Set the desired size here
                     listener { _, _ ->
                         // When the image is successfully loaded, start the upload task
                         val uploadTask: StorageTask<*>
@@ -225,7 +227,7 @@ class AccountSettingsActivity : AppCompatActivity() {
 
                                 Toast.makeText(
                                     this@AccountSettingsActivity,
-                                    "Profile Picture Set ",
+                                    "Profile Picture Set",
                                     Toast.LENGTH_LONG
                                 ).show()
                                 finish()
@@ -234,9 +236,9 @@ class AccountSettingsActivity : AppCompatActivity() {
                                 progressDialog.dismiss()
                             }
                         })
+
+                        placeholder(R.drawable.profile)
                     }
-                    // Optional: Placeholder image while loading
-                    placeholder(R.drawable.profile)
                 }
             }
         }

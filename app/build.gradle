@@ -86,5 +86,11 @@ dependencies {
     //crop image
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
 
 }

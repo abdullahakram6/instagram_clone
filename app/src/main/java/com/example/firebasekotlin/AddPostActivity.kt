@@ -3,9 +3,11 @@ package com.example.firebasekotlin
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.widget.Toast
 import com.example.firebasekotlin.databinding.ActivityAddPostBinding
@@ -19,6 +21,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.theartofdev.edmodo.cropper.CropImage
+import java.io.ByteArrayOutputStream
 
 class AddPostActivity : AppCompatActivity() {
 
@@ -62,11 +65,10 @@ class AddPostActivity : AppCompatActivity() {
 
 
 
-    private fun uploadImage()
-    {
-        when{
-            TextUtils.isEmpty(binding.descriptionPost.text.toString()) -> Toast.makeText(this , "Enter a caption..." , Toast.LENGTH_LONG).show()
-            imageUri == null -> Toast.makeText(this , "Please Select Picture", Toast.LENGTH_LONG).show()
+    private fun uploadImage() {
+        when {
+            TextUtils.isEmpty(binding.descriptionPost.text.toString()) -> Toast.makeText(this, "Enter a caption...", Toast.LENGTH_LONG).show()
+            imageUri == null -> Toast.makeText(this, "Please Select Picture", Toast.LENGTH_LONG).show()
             else -> {
                 val progressDialog = ProgressDialog(this)
                 progressDialog.setTitle("Adding new post")
@@ -75,49 +77,68 @@ class AddPostActivity : AppCompatActivity() {
 
                 val fileref = storagePostPicRef!!.child(System.currentTimeMillis().toString() + "jpg")
 
-                var uploadTask : StorageTask<*>
-                uploadTask = fileref.putFile(imageUri!!)
+                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+
+                // Resize the image here
+                val resizedBitmap = resizeBitmap(bitmap, 800) // Adjust the size as needed
+
+                val baos = ByteArrayOutputStream()
+                resizedBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+
+                val uploadTask = fileref.putBytes(data)
 
                 uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                    if (!task.isSuccessful)
-                    {
+                    if (!task.isSuccessful) {
                         task.exception?.let {
                             throw it
                             progressDialog.dismiss()
                         }
                     }
                     return@Continuation fileref.downloadUrl
-                }).addOnCompleteListener ( OnCompleteListener<Uri>{task ->
-                    if (task.isSuccessful)
-                    {
+                }).addOnCompleteListener(OnCompleteListener<Uri> { task ->
+                    if (task.isSuccessful) {
                         val downloadUrl = task.result
                         myUrl = downloadUrl.toString()
 
                         val ref = FirebaseDatabase.getInstance().reference.child("Posts")
                         val postId = ref.push().key
-                        val postMap = HashMap<String, Any >()
-                        postMap["postid"]= postId!!
-                        postMap["description"]= binding.descriptionPost.text.toString()
-                        postMap["publisher"]= FirebaseAuth.getInstance().currentUser!!.uid
-                        postMap["postimage"]= myUrl
-
-
+                        val postMap = HashMap<String, Any>()
+                        postMap["postid"] = postId!!
+                        postMap["description"] = binding.descriptionPost.text.toString()
+                        postMap["publisher"] = FirebaseAuth.getInstance().currentUser!!.uid
+                        postMap["postimage"] = myUrl
 
                         ref.child(postId).updateChildren(postMap)
 
-
-                        Toast.makeText(this , "Post uploaded successfully", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Post uploaded successfully", Toast.LENGTH_LONG).show()
                         finish()
                         progressDialog.dismiss()
-                    }
-                    else{
+                    } else {
                         progressDialog.dismiss()
                     }
-                } )
-
+                })
             }
         }
-
     }
+
+    // Function to resize a Bitmap
+    private fun resizeBitmap(image: Bitmap, maxSize: Int): Bitmap? {
+        var width = image.width
+        var height = image.height
+
+        val bitmapRatio = width.toFloat() / height.toFloat()
+
+        if (bitmapRatio > 1) {
+            width = maxSize
+            height = (width / bitmapRatio).toInt()
+        } else {
+            height = maxSize
+            width = (height * bitmapRatio).toInt()
+        }
+
+        return Bitmap.createScaledBitmap(image, width, height, true)
+    }
+
 
 }

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.firebasekotlin.fragments.HomeFragment
 import com.example.firebasekotlin.Model.Post
 import com.example.firebasekotlin.Model.User
@@ -62,6 +63,7 @@ class PostAdapter(
         }
 
 
+
         publisherInfo(
             holder.profileImage,
             holder.userName,
@@ -113,7 +115,7 @@ class PostAdapter(
             postImage = itemView.findViewById(R.id.post_image_home)
             likeButton = itemView.findViewById(R.id.post_image_like_btn)
             userName = itemView.findViewById(R.id.user_name_search)
-            likes_count = itemView.findViewById(R.id.likes_count)
+            likes_count = itemView.findViewById(R.id.likes)
             publisher = itemView.findViewById(R.id.publisher)
             description = itemView.findViewById(R.id.description)
         }
@@ -132,8 +134,10 @@ class PostAdapter(
                 if (snapshot.exists()) {
                     val user = snapshot.getValue<User>(User::class.java)
 
+
+                    // Load and display the profile image using Coil
                     profileImage.load(user!!.getImage()) {
-                        placeholder(R.drawable.profile)
+                        transformations(CircleCropTransformation()) // Apply a circular transformation to the image
                     }
                     userName.text = user.getUsername()
                     publisher.text = user.getUsername()
