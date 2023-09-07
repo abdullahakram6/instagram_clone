@@ -19,10 +19,8 @@ class LoginActivity : BaseActivityWithoutVM<ActivityLoginBinding>() {
         private const val RC_SIGN_IN = 9001
     }
 
-
             override fun getViewBinding(): ActivityLoginBinding =
         ActivityLoginBinding.inflate(layoutInflater)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +34,6 @@ class LoginActivity : BaseActivityWithoutVM<ActivityLoginBinding>() {
         firebaseAuth = FirebaseAuth.getInstance()
         val firebase : DatabaseReference= FirebaseDatabase.getInstance().reference
         val currentUser = firebaseAuth.currentUser
-
-
     }
 
     private fun signIn() {

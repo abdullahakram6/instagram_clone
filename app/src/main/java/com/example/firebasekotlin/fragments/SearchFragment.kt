@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
                 } else {
                     recyclerView?.visibility = View.VISIBLE
                      retrieveUsers()
-                    searchUser(s.toString().toLowerCase())
+                    searchUser(s.toString())
                 }
             }
             override fun afterTextChanged(s: Editable?) {
@@ -69,11 +69,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchUser(input: String) {
+
+        val inputLowercase = input.toLowerCase()
+
         val query = FirebaseDatabase.getInstance().reference
             .child("Users")
-            .orderByChild("fullName")
-            .startAt(input)
-            .endAt(input+"\uf8ff")
+            .orderByChild("fullNameLowercase")
+            .startAt(inputLowercase)
+            .endAt(inputLowercase+"\uf8ff")
 
         query.addValueEventListener(object:ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot)
@@ -94,6 +97,29 @@ class SearchFragment : Fragment() {
             }
             override fun onCancelled(error: DatabaseError)
             {
+
+            }
+        })
+        val queryByUsername = FirebaseDatabase.getInstance().reference
+            .child("Users")
+            .orderByChild("userName")
+            .startAt(input)
+            .endAt(input + "\uf8ff")
+
+        queryByUsername.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user?.getUID() != firebaseUser?.uid) {
+                        if (user != null && !mUser?.contains(user)!!) {
+                            mUser?.add(user)
+                        }
+                    }
+                }
+                userAdapter?.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
 
             }
         })

@@ -113,6 +113,8 @@ class ProfileFragment : Fragment() {
 
         }
 
+
+
         getFollowers()
         getFollowings()
         userInfo()

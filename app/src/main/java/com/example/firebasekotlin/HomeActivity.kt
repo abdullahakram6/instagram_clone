@@ -28,7 +28,7 @@ class HomeActivity : AppCompatActivity() {
             }
             R.id.nav_add_post -> {
                 item.isCheckable=false
-                startActivity(Intent(this@HomeActivity,AddPostActivity::class.java))
+                startActivity(Intent(this@HomeActivity, AddPostActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_notifications -> {

@@ -77,11 +77,12 @@ class SignUpActivity: AppCompatActivity() {
 
         val userMap = HashMap<String, Any >()
         userMap["uid"]= currentUserID
-        userMap["fullName"]= fullName.lowercase()
+        userMap["fullName"]= fullName
         userMap["userName"]= userName.lowercase()
         userMap["email"]= email
         userMap["bio"]= ""
         userMap["image"]= "https://firebasestorage.googleapis.com/v0/b/meta-6c6cb.appspot.com/o/Default%20Images%2Fprofile.png?alt=media&token=2227e475-c948-402f-8793-262e3b594b32"
+        userMap["fullNameLowercase"] = fullName.lowercase()
 
         usersRef.child(currentUserID).setValue(userMap).addOnCompleteListener { task ->
             if (task.isSuccessful)
