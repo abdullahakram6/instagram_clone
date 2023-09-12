@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.firebasekotlin.fragments.HomeFragment
 import com.example.firebasekotlin.Model.Post
 import com.example.firebasekotlin.Model.User
@@ -40,7 +41,14 @@ class PostAdapter(
     fun setOnLikeClickListener(listener: HomeFragment) {
         likeClickListener = listener
     }
+    init {
+        setHasStableIds(true)
+    }
 
+    override fun getItemId(position: Int): Long {
+        // Return a unique ID for each item (e.g., post ID)
+        return mPost[position].getPostid().hashCode().toLong()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.posts_layout, parent, false)
         return ViewHolder(view)
@@ -133,7 +141,7 @@ class PostAdapter(
                     val user = snapshot.getValue<User>(User::class.java)
 
                     profileImage.load(user!!.getImage()) {
-                        placeholder(R.drawable.profile)
+                        transformations(CircleCropTransformation()) // Apply a circular transformation to the image
                     }
                     userName.text = user.getUsername()
                     publisher.text = user.getUsername()

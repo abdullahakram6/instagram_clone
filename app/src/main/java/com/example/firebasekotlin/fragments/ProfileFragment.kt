@@ -114,10 +114,10 @@ class ProfileFragment : Fragment() {
         }
 
 
-
+        userInfo()
         getFollowers()
         getFollowings()
-        userInfo()
+
         return view
 
     }
@@ -128,27 +128,24 @@ class ProfileFragment : Fragment() {
                 .child("Follow").child(it1.toString())
                 .child("Following")
         }
-        if (followingRef != null) {
-            followingRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.child(profileId).exists()) {
+        followingRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(profileId).exists()) {
 
 
-                        binding.editAccountSettingsTV.text = "Following"
-                    } else {
+                    binding.editAccountSettingsTV.text = "Following"
+                } else {
 
 
-                        binding.editAccountSettingsTV.text = "Follow"
-
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
+                    binding.editAccountSettingsTV.text = "Follow"
 
                 }
-            })
+            }
 
-        }
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
     private fun getFollowers() {
@@ -209,16 +206,12 @@ class ProfileFragment : Fragment() {
                         transformations(CircleCropTransformation()) // Optional: Apply a circular transformation to the image
                     }
 
-
-
                     binding.profileFragmentUsername.text = user.getUsername()
                     binding.fullNameProfileFrag.text = user.getFullname()
                     binding.bioProfileFrag.text = user.getBio()
 
-
                     app_bar_layout_profile_frag.visibility = View.VISIBLE
                     scroll_view.visibility = View.VISIBLE
-
                 }
             }
 

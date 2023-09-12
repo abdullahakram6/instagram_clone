@@ -8,6 +8,8 @@ class Post {
     private var description: String = ""
     private var likes: Int = 0
      var isLiked: Boolean = false
+    private var timestamp: Long = 0 // Add timestamp property
+
 
 
     constructor()
@@ -18,6 +20,8 @@ class Post {
         this.postimage = postimage
         this.publisher = publisher
         this.description = description
+        this.timestamp = timestamp // Initialize timestamp
+
     }
 
 
@@ -40,7 +44,9 @@ class Post {
     fun getLikes(): Int {
         return likes
     }
-
+    fun getTimestamp(): Long {
+        return timestamp
+    }
 
 
     ///Setter
@@ -65,5 +71,9 @@ class Post {
     fun setLikes(likes: Int)
     {
         this.likes = likes
+    }
+
+    fun setTimestamp(timestamp: Long) {
+        this.timestamp = timestamp
     }
 }

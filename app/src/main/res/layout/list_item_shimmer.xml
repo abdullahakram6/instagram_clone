@@ -20,13 +20,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_profile_image_post"
+            <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="#C2C2C2"
-                android:layout_marginBottom="4dp"
-                android:padding="5dp"/>
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="3dp"
+                />
 
             <TextView
                 android:id="@+id/user_name_search"
@@ -35,7 +38,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="16dp"
                 android:background="#C2C2C2"
                 />
 
@@ -96,7 +99,7 @@
             />
 
         <TextView
-            android:id="@+id/likes"
+            android:id="@+id/likes_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

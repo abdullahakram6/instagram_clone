@@ -76,7 +76,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Follow"
-
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
