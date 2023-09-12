@@ -7,8 +7,7 @@ class Post {
     private var publisher: String = ""
     private var description: String = ""
     private var likes: Int = 0
-    var isLiked: Boolean = false
-    private var timestamp: Long = 0 // Add timestamp property
+     var isLiked: Boolean = false
 
 
     constructor()
@@ -19,27 +18,22 @@ class Post {
         this.postimage = postimage
         this.publisher = publisher
         this.description = description
-        this.timestamp = timestamp // Initialize timestamp
-
     }
 
 
     ///Getter
 
 
-    fun getPostid(): String {
+    fun getPostid(): String{
         return postid
     }
-
-    fun getPostimage(): String {
+    fun getPostimage(): String{
         return postimage
     }
-
-    fun getPublisher(): String {
+    fun getPublisher(): String{
         return publisher
     }
-
-    fun getDescription(): String {
+    fun getDescription(): String{
         return description
     }
 
@@ -47,35 +41,29 @@ class Post {
         return likes
     }
 
-    fun getTimestamp(): Long {
-        return timestamp
-    }
 
 
     ///Setter
 
-    fun setpostid(postid: String) {
-        this.postid = postid
+    fun setpostid(postid: String)
+    {
+        this.postid=postid
+    }
+    fun setPostimage(postimage: String)
+    {
+        this.postimage=postimage
+    }
+    fun setPublisher(publisher: String)
+    {
+        this.publisher=publisher
+    }
+    fun setDescription(description: String)
+    {
+        this.description=description
     }
 
-    fun setPostimage(postimage: String) {
-        this.postimage = postimage
-    }
-
-    fun setPublisher(publisher: String) {
-        this.publisher = publisher
-    }
-
-    fun setDescription(description: String) {
-        this.description = description
-    }
-
-    fun setLikes(likes: Int) {
+    fun setLikes(likes: Int)
+    {
         this.likes = likes
     }
-
-    fun setTimestamp(timestamp: Long) {
-        this.timestamp = timestamp
-    }
-
 }

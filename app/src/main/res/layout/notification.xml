@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="8dp"
+            android:layout_marginTop="13dp"
+            android:id="@+id/app_logo_noti"
+            android:src="@drawable/meta"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:id="@+id/title_noti"
+            android:textSize="20dp"
+            android:layout_toRightOf="@id/app_logo_noti"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is Message"
+            android:id="@+id/message_noti"
+            android:textSize="20dp"
+            android:layout_below="@id/title_noti"
+            android:layout_toRightOf="@id/app_logo_noti"
+            android:layout_marginLeft="10dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
